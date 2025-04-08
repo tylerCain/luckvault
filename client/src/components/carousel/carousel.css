@@ -1,0 +1,76 @@
+.carousel-container {
+  width: 100%;
+  margin: auto;
+  /*margin-top: 40px;*/
+}
+
+.carousel-slide {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.carousel-image {
+  width: 100%;
+  background-size: cover;
+  background-position: 50% 25%;
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+
+.review-container {
+  width: 80%;
+  margin: auto;
+  margin-top: 48px;
+  position: relative;
+}
+
+.comment-box {
+  padding: 20px 40px 20px 40px;
+  margin: 64px 0 40px;
+  position: relative;
+  background-color: white;
+  color: #46ab49;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  &::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 15px 15px 0 0;
+    border-color: white transparent transparent transparent;
+    position: absolute;
+    bottom: -15px;
+    left: 20px;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 960px) {
+  .carousel-slide {
+    flex-direction: column;
+  }
+
+  .carousel-container {
+    width: 100%;
+  }
+
+  .carousel-image {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+
+  .carousel-image:last-child {
+    margin-bottom: 0;
+  }
+
+  .review-container {
+    width: 90%;
+  }
+
+  .comment-box {
+    margin: 24px 0 16px;
+  }
+}

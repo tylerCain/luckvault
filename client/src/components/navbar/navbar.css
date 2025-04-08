@@ -1,0 +1,99 @@
+/* Global styles */
+body {
+  overflow-x: hidden;
+}
+
+/* Navbar container */
+.navbar {
+  display: flex;
+  align-items: center;
+  height: 80px;
+  background-color: white;
+  padding: 0;
+  width: 100%;
+  position: relative; /* Make it relative to position links absolutely */
+  overflow-x: hidden;
+}
+
+/* Logo */
+.navbar-logo {
+  background-size: cover;
+  background-position: center;
+  max-width: 100%;
+}
+
+/* Links container */
+.navbar-links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* This centers the links */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Navbar buttons */
+.navbar-button {
+  margin: 0 32px !important;
+  color: #46ab49 !important; /* Restore the green color */
+  text-transform: capitalize !important;
+  font-size: large !important; /* Restore the original font size */
+  font-weight: 700 !important;
+}
+
+/* Mobile menu button */
+.MuiButtonBase-root.navbar-menu-button {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .navbar {
+    flex-direction: row;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    justify-content: space-between;
+    max-width: 100%;
+  }
+
+  .navbar-logo {
+    width: auto;
+  }
+
+  .navbar-links {
+    display: none;
+  }
+
+  .MuiButtonBase-root.navbar-menu-button {
+    display: block;
+  }
+}
+
+@media (min-width: 801px) {
+  .navbar {
+    flex-direction: row;
+    height: auto;
+    width: 100%;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    justify-content: flex-start;
+  }
+
+  .navbar-logo {
+    margin-left: 16px !important;
+    width: auto;
+  }
+
+  .navbar-links {
+    display: flex;
+    justify-content: center; /* Center the links */
+    flex-grow: 1; /* Ensures the links take up the full available space */
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .MuiButtonBase-root.navbar-menu-button {
+    display: none;
+  }
+}
