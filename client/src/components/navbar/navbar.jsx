@@ -1,96 +1,129 @@
 import React, { useState } from 'react'
-import { AppBar, Box, Button, Toolbar, Menu, MenuItem, IconButton } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import {
+  AppBar,
+  Box,
+  Button,
+  Toolbar,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+  Typography,
+  Container
+} from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import './navbar.css'  // Import the CSS file
+import { useNavigate } from 'react-router-dom'
+import { useAuth0 } from '@auth0/auth0-react'
+import UserAvatar from './avatar'
 import logo from '../../luckvaultlogo.png'
 
 const pages = [
-    { name: 'Home', link: '/home' },
-    { name: 'Raffles', link: '/rafffles' },
-    { name: 'FAQs', link: '/faq' },
+  { name: 'Home', link: '/home' },
+  { name: 'Raffles', link: '/raffles' },
+  { name: 'FAQs', link: '/faq' },
 ]
 
 const Navbar = () => {
   const navigate = useNavigate()
-  const [anchorEl, setAnchorEl] = useState(null)
+  const { isAuthenticated, loginWithRedirect } = useAuth0()
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const isMobile = useMediaQuery('(max-width:800px)')
 
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleMenuClose = (link) => {
-    if (link) navigate(link)
-    window.scrollTo(0, 0)
-    setAnchorEl(null)
+  const toggleDrawer = (open) => () => {
+    setDrawerOpen(open)
   }
 
   const navigateLink = (link) => {
     navigate(link)
     window.scrollTo(0, 0)
+    setDrawerOpen(false)
   }
 
   return (
-    <AppBar className="navbar" position="sticky">
-      <Toolbar className="navbar">
-        <Button className="navbar-logo" onClick={() => navigate('/')}>
-          <img src={logo} alt="The Luck Vault" style={{ height: '64px', maxWidth: '100%' }} />
-        </Button>
-        <Box className="navbar-links">
-          {pages.map(({ name, link }) => (
-            <Button
-              key={name}
-              onClick={() => navigateLink(link)}
-              className="navbar-button"
-            >
-              {name}
-            </Button>
-          ))}
-        </Box>
-        <Box sx={{ ml: '70%' }}>
+    <AppBar position="sticky" sx={{ backgroundColor: 'white', boxShadow: 1 }}>
+      <Container maxWidth="xl">
+        <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, sm: 4 } }}>
+          {/* Logo */}
           <Button
-            onClick={() => navigate('/login')}
-            className="navbar-button"
-            sx={{
-              padding: { sm: '1px'},
-              mx: { sm: '4px' },
-              fontWeight: 700,
-              color: '#46ab49',
-            }}
+            onClick={() => navigate('/')}
+            sx={{ p: 0, minWidth: 'auto' }}
           >
-            Login
+            <img
+              src={logo}
+              alt="The Luck Vault"
+              style={{ height: '80px', width: 'auto', maxWidth: '180px', objectFit: 'contain' }}
+            />
           </Button>
+
+          {/* Desktop Links */}
+          {!isMobile && (
+            <Box sx={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 4, alignItems: 'center' }}>
+              {pages.map(({ name, link }) => (
+                <Button
+                  key={name}
+                  onClick={() => navigateLink(link)}
+                  sx={{ color: '#46ab49', fontWeight: 700, fontSize: '1.25rem', textTransform: 'capitalize' }}
+                >
+                  {name}
+                </Button>
+              ))}
+            </Box>
+          )}
+
+          {/* Auth & Menu */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            {!isAuthenticated ? (
+              <Button
+                onClick={() => loginWithRedirect()}
+                sx={{ fontWeight: 700, color: '#46ab49', textTransform: 'capitalize', fontSize: '1.25rem' }}
+              >
+                Login
+              </Button>
+            ) : (
+              <UserAvatar MenuProps={{ disableScrollLock: true }} />
+            )}
+
+            {/* Mobile menu */}
+            {isMobile && (
+              <IconButton edge="end" onClick={toggleDrawer(true)}>
+                <MenuIcon sx={{ color: '#1c6d19' }} />
+              </IconButton>
+            )}
+          </Box>
+        </Toolbar>
+      </Container>
+
+      {/* Drawer for mobile nav */}
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={toggleDrawer(false)}
+        disableScrollLock
+        PaperProps={{
+          sx: {
+            width: 250,
+            height: 'auto',
+            maxHeight: '90vh',
+            mt: '64px',
+            overflowY: 'auto',
+            borderTop: '1px solid #ccc'
+          }
+        }}
+      >
+        <Box role="presentation">
+          <List>
+            {pages.map(({ name, link }) => (
+              <ListItem button key={name} onClick={() => navigateLink(link)}>
+                <ListItemText
+                  primary={<Typography textAlign="center" sx={{ color: '#46ab49', fontWeight: 600 }}>{name}</Typography>}
+                />
+              </ListItem>
+            ))}
+          </List>
         </Box>
-        <IconButton 
-          edge="end" 
-          className="navbar-menu-button"
-          onClick={handleMenuOpen} 
-        >
-          <MenuIcon sx={{ color: '#1c6d19' }} />
-        </IconButton>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={() => handleMenuClose(null)}
-          disableScrollLock={true}
-          sx={{
-            '& .MuiPaper-root': {
-              position: 'absolute',
-              top: '64px', // Adjust based on the height of your AppBar
-              right: 0,
-              left: 0,
-              maxWidth: '25vw', // Ensure the menu does not exceed viewport width
-              overflowX: 'hidden', // Hide any horizontal overflow
-            }
-          }}
-        >
-          {pages.map(({ name, link }) => (
-            <MenuItem key={name} onClick={() => handleMenuClose(link)} sx={{ color: '#46ab49'}}>
-              {name}
-            </MenuItem>
-          ))}
-        </Menu>
-      </Toolbar>
+      </Drawer>
     </AppBar>
   )
 }

@@ -1,12 +1,10 @@
 import React from 'react'
-import ServicesHeader from '../services/servicesHeader'
 import { Box, Button, Divider, TextField, Typography, Grid } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import emailjs from 'emailjs-com'
 import PhoneIcon from '@mui/icons-material/Phone'
 import EmailIcon from '@mui/icons-material/Email'
 import InstagramIcon from '@mui/icons-material/Instagram'
-import background from '../_content/IMG_3317.webp'
 
 const ContactPage = () => {
   const { register, handleSubmit, formState: { errors }, reset } = useForm()
@@ -41,7 +39,6 @@ const ContactPage = () => {
 
   return (
     <>
-      <ServicesHeader background={background} text="Contact Us" />
       <Box sx={{ backgroundColor: '#46ab49', mx: 'auto', padding: 2, pb: 5 }}>
         <Typography sx={{ color: 'white', textAlign: 'center', fontSize: '1.25rem', px: 4 }}>
           You can use this page to directly send us an email with any queries you may have, and view our contact details.

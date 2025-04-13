@@ -26,14 +26,14 @@ const HomepageCarousel = ({ navigateLink }) => {
             className="carousel-image"
             sx={{
               backgroundImage: `url(${header})`,
-              height: { xs: '40vh', sm: '50vh', md: '60vh', lg: '60vh' },
+              height: { xs: '60vh', sm: '60vh', md: '60vh', lg: '60vh' },
             }}
           >
             <Box
               className="headerTypography"
               width={{ xs: '80%', sm: '80%', md: '60%', lg: '60%' }}
               sx={{
-                mt: 12,
+                mt: 6,
                 mx: 'auto',  // Centers the box horizontally
                 display: 'flex', // Ensures the content inside the box is flexed
                 flexDirection: 'column', // Stacks the content vertically
@@ -44,7 +44,7 @@ const HomepageCarousel = ({ navigateLink }) => {
               }}
             >
               <Typography
-                variant="h2"
+                variant="h4"
                 sx={{
                   color: 'white',
                   fontWeight: 700,
@@ -53,7 +53,7 @@ const HomepageCarousel = ({ navigateLink }) => {
                 One Vault, Endless Possibilities
               </Typography>
               <Typography
-                variant="h3"
+                variant="h5"
                 sx={{
                   color: 'white',
                   fontWeight: 700,
@@ -81,7 +81,7 @@ const HomepageCarousel = ({ navigateLink }) => {
                   px: 4,
                   textTransform: 'none',
                   mx: 'auto',
-                  fontSize: '24px',
+                  fontSize: '20px',
                   borderRadius: '16px',
                   mt: 6,
                   '&:hover': {

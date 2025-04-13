@@ -46,6 +46,11 @@ body {
   display: none;
 }
 
+.navbar-logo img {
+  max-height: 80px;
+  width: auto;
+}
+
 @media (max-width: 800px) {
   .navbar {
     flex-direction: row;
