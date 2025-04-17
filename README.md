@@ -18,7 +18,7 @@ After cloning this repository:
 Postgres:
 docker run --name luckvault -p 5432:5432 -e POSTGRES_PASSWORD=luckPOSTGRESvault4077 postgres
 
-docker exec -it luckvault psql -U postgres
+docker exec -it luckvault psql -U postgres -d luckvault
 
 Rules for deployment:
 ✅ Short-Term Setup Tips for Easier AWS/Postgres Deployment

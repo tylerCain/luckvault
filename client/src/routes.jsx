@@ -3,11 +3,13 @@ import { Routes, Route } from 'react-router-dom'
 import Homepage from './index.jsx'
 import NotFoundPage from './components/404.jsx'
 import Raffles from './raffle/raffleHomepage.jsx'
+import RafflePage from './raffle/rafflePage.jsx'
 
 export default () => (
   <Routes>
     <Route path="/" element={<Homepage />} />
     <Route path="/raffles" element={<Raffles />} />
+    <Route path="/raffles/:raffleId" element={<RafflePage />} />
     <Route path="*" element={<NotFoundPage />} />
   </Routes>
 )

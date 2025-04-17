@@ -10,16 +10,26 @@ const mapRaffle = raffle => ({
   maxTickets: raffle.max_tickets,
   endsAt: raffle.ends_at,
   status: raffle.status,
+  ticketsSold: parseInt(raffle.tickets_sold, 10) || 0
 })
 
 const getRaffleQuery = `
-  SELECT * FROM luckvault.raffles
-  WHERE id = $1
+  SELECT 
+    r.*,
+    (
+      SELECT COUNT(*) 
+      FROM luckvault.entries e 
+      WHERE e.raffle_id = r.id
+    ) AS tickets_sold
+  FROM luckvault.raffles r
+  WHERE r.id = $1
 `
 
 const getRaffle = async (raffleId) => {
   const getRaffleResult = await pool.query(getRaffleQuery, [raffleId])
-  return getRaffleResult.rows.map(mapRaffle)
+  const raffle = getRaffleResult.rows[0] 
+
+  return mapRaffle(raffle)
 }
 
 export default getRaffle

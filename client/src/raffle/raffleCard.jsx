@@ -4,16 +4,22 @@ import {
   Card,
   CardMedia,
   Typography,
+  Button,
   IconButton,
-  Button
+  Tooltip,
+  LinearProgress,
+  Chip
 } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import useIsAdmin from '../hooks/useIsAdmin'
+import { useNavigate } from 'react-router-dom'
+import RaffleProgressBar from './raffleProgressBar'
 
 const RaffleCard = ({ raffle, onEdit, onDelete }) => {
   const isAdmin = useIsAdmin()
-  const hasEnded = new Date(raffle.endsAt) < new Date()
+  const navigate = useNavigate()
+  const hasEnded = raffle.status === 'CLOSED'
 
   return (
     <Card
@@ -34,18 +40,6 @@ const RaffleCard = ({ raffle, onEdit, onDelete }) => {
         color: { xs: 'white', sm: 'inherit' }
       }}
     >
-      {/* Admin icon buttons */}
-      {isAdmin && (
-        <Box sx={{ position: 'absolute', top: 12, right: 12, zIndex: 10 }}>
-          <IconButton onClick={() => onEdit(raffle)} sx={{ color: { xs: 'white', sm: '#015f44' } }}>
-            <EditIcon />
-          </IconButton>
-          <IconButton onClick={() => onDelete(raffle)} sx={{ color: '#f44336' }}>
-            <DeleteIcon />
-          </IconButton>
-        </Box>
-      )}
-
       {/* Desktop Image Side */}
       <Box
         sx={{
@@ -83,25 +77,46 @@ const RaffleCard = ({ raffle, onEdit, onDelete }) => {
           <Typography
             variant="caption"
             sx={{
-              bgcolor: { xs: 'white', sm: 'transparent' },
-              color: { xs: 'black', sm: 'text.secondary' },
-              px: 1,
-              py: 0.5,
-              borderRadius: 1,
-              mt: 1,
-              display: 'inline-block'
+              backgroundColor: raffle.hasEnded ? '#b00020' : '#46ab49',
+              color: 'white',
+              px: 1.2,
+              py: 0.4,
+              borderRadius: '12px',
+              fontWeight: 600,
+              fontSize: '0.75rem',
+              textAlign: 'center'
             }}
           >
             {new Date(raffle.endsAt).toLocaleString('en-GB', {
-              day: 'short',
+              day: '2-digit',
               month: 'short',
               hour: '2-digit',
               minute: '2-digit'
             })}
           </Typography>
+
+          {isAdmin && (
+            <Box sx={{ display: 'flex', gap: 1, mt: 4 }}>
+              <Tooltip title="Edit">
+                <IconButton onClick={() => onEdit(raffle)} sx={{ color: '#015f44', backgroundColor: { xs: 'white'} }}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Delete">
+                <IconButton onClick={() => onDelete(raffle)} sx={{ color: '#b00020', backgroundColor: { xs: 'white'} }}>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          )}
         </Box>
 
         <Box>
+          <RaffleProgressBar
+            ticketsSold={raffle.ticketsSold ?? 12}
+            maxTickets={raffle.maxTickets}
+          />
+          
           <Typography
             variant="subtitle2"
             sx={{ fontWeight: 600, mt: 2 }}
@@ -114,12 +129,10 @@ const RaffleCard = ({ raffle, onEdit, onDelete }) => {
             size="small"
             sx={{
               mt: 1.5,
-              backgroundColor: '#fff',
-              color: '#000',
-              fontWeight: 700,
-              '&:hover': { backgroundColor: '#f0f0f0' }
+              fontWeight: 500,
+              color: 'white',
             }}
-            disabled={hasEnded}
+            onClick={() => navigate(`/raffles/${raffle.raffleId}`)}
           >
             {hasEnded ? 'View Winner' : 'Enter Now'}
           </Button>

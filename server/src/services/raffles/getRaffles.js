@@ -1,6 +1,6 @@
 import { pool } from '../../connectors/postgres.js'
 
-const mapRaffles = raffle => ({
+const mapRaffle = raffle => ({
   raffleId: raffle.id,
   title: raffle.title,
   description: raffle.description,
@@ -10,16 +10,24 @@ const mapRaffles = raffle => ({
   maxTickets: raffle.max_tickets,
   endsAt: raffle.ends_at,
   status: raffle.status,
+  ticketsSold: parseInt(raffle.tickets_sold, 10) || 0
 })
 
 const getRafflesQuery = `
-  SELECT * FROM luckvault.raffles
+  SELECT 
+    r.*,
+    COALESCE(e.tickets_sold, 0) AS tickets_sold
+  FROM luckvault.raffles r
+  LEFT JOIN (
+    SELECT raffle_id, COUNT(*) AS tickets_sold
+    FROM luckvault.entries
+    GROUP BY raffle_id
+  ) e ON r.id = e.raffle_id
 `
 
 const getRaffles = async () => {
-  const getRafflesResult = await pool.query(getRafflesQuery)
-  console.log(getRafflesResult)
-  return getRafflesResult.rows.map(mapRaffles)
+  const result = await pool.query(getRafflesQuery)
+  return result.rows.map(mapRaffle)
 }
 
 export default getRaffles

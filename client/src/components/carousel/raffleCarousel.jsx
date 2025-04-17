@@ -9,29 +9,23 @@ import './carousel.css'  // Optional custom styling
 import bike from '../../bike.jpg'
 import holiday from '../../holiday.jpg'
 import ps5 from '../../ps5.jpg'
-
-const raffles = [
-  {
-    title: "Win a Dream Holiday",
-    description: "Enter now for a chance to win a 5-star trip to Marrakech.",
-    image: holiday, // replace with actual paths
-    open: true,
-  },
-  {
-    title: "Win a PS5",
-    description: "Get your hands on the newest iPhone for just £1 a ticket.",
-    image: ps5,
-    open: true,
-  },
-  {
-    title: "Surron Light Bee",
-    description: "Life-changing cash up for grabs. Enter before it ends!",
-    image: bike,
-    open: false,
-  },
-]
+import { useRaffles } from '../../connectors/raffles'
+import { useNavigate } from 'react-router-dom'
 
 const RaffleCarousel = () => {
+  const rafflesResponse = useRaffles()
+  const navigate = useNavigate()
+
+  if (rafflesResponse.isLoading) return <Typography>Loading raffles...</Typography>
+  if (rafflesResponse.isError) return <Typography>Error loading raffles</Typography>
+  if (!rafflesResponse.isSuccess) return null
+
+  const raffles = rafflesResponse.data.raffles
+
+  const filtered = {
+    Open: raffles.filter((r) => r.status === 'OPEN'),
+  }
+
   const settings = {
     dots: true,
     infinite: true,
@@ -42,19 +36,19 @@ const RaffleCarousel = () => {
     prevArrow: <PrevArrow />,
   }
 
-    return (
+  return (
     <Box className="raffle-carousel" width={{ xs: 0.9, sm: 0.8, md: 0.4 }} sx={{ mx: 'auto', my: 4 }}>
       <Typography align="center" variant="h4" sx={{ fontWeight: 700, mb: 2, color: '#015f44' }}>
         Featured Raffles
       </Typography>
       <Slider {...settings}>
-        {raffles.map((raffle, index) => (
+        {filtered['Open']?.map((raffle) => (
           <Card
-            key={index}
+            key={raffle.raffleId}
             sx={{
               position: 'relative',
               height: 400,
-              backgroundImage: `url(${raffle.image})`,
+              backgroundImage: `url(${raffle.imageUrl})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               color: '#fff',
@@ -81,12 +75,14 @@ const RaffleCarousel = () => {
               <Typography variant="body1" sx={{ maxWidth: 600, mb: 3 }}>
                 {raffle.description}
               </Typography>
-              {raffle.open ? ( <Button variant="contained" size="large" sx={{ backgroundColor: '#46ab49' }}>
+              <Button variant="contained" size="large" sx={{ backgroundColor: '#46ab49' }} onClick={() => navigate(`/raffles/${raffle.raffleId}`)}>
+                View More Info
+              </Button>
+              {/*raffle.open ? ( <Button variant="contained" size="large" sx={{ backgroundColor: '#46ab49' }}>
                 Enter Now
               </Button> ) : ( <Button variant="contained" size="large" sx={{ backgroundColor: '#46ab49' }}>
                 View Winner
-              </Button>)
-              }
+              </Button>)*/}
             </Box>
           </Card>
         ))}

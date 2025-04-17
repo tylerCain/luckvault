@@ -20,7 +20,7 @@ import UserAvatar from './avatar'
 import logo from '../../luckvaultlogo.png'
 
 const pages = [
-  { name: 'Home', link: '/home' },
+  { name: 'Home', link: '/' },
   { name: 'Raffles', link: '/raffles' },
   { name: 'FAQs', link: '/faq' },
 ]

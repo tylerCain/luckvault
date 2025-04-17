@@ -1,12 +1,28 @@
-import React from 'react'
-import { Box, Grid, Typography, Card, CardMedia, CardContent, CardActions, Button } from '@mui/material'
+import React, { useState } from 'react'
+import {
+  Tabs,
+  Tab,
+  Box,
+  Typography,
+  Grid,
+  Button
+} from '@mui/material'
+import RaffleCard from './raffleCard'
+import useIsAdmin from '../hooks/useIsAdmin'
 import { useRaffles } from '../connectors/raffles'
-import { useAuth0 } from '@auth0/auth0-react'
-
+import CreateRaffleModal from './createRaffle'
+import EditRaffleModal from './updateRaffle'
+import DeleteRaffleDialog from './deleteRaffle'
 
 const Raffles = () => {
+  const [tabIndex, setTabIndex] = useState(0)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [editModalOpen, setEditModalOpen] = useState(false)
+  const [selectedRaffle, setSelectedRaffle] = useState(null)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [raffleToDelete, setRaffleToDelete] = useState(null)
+  const isAdmin = useIsAdmin()
   const rafflesResponse = useRaffles()
-  const { user } = useAuth0()
 
   if (rafflesResponse.isLoading) return <Typography>Loading raffles...</Typography>
   if (rafflesResponse.isError) return <Typography>Error loading raffles</Typography>
@@ -14,13 +30,45 @@ const Raffles = () => {
 
   const raffles = rafflesResponse.data.raffles
 
-  const rafflesWithStatus = raffles.map((raffle) => ({
-    ...raffle,
-    hasEnded: new Date(raffle.endsAt) < new Date()
-  }))
+  const handleChange = (event, newValue) => {
+    setTabIndex(newValue)
+  }
 
-  const roles = user?.['https://luckvault.uk/user/roles'] || []
-  const isAdmin = roles.includes('admin')
+  const handleCreate = (formData) => {
+    console.log('Send to API:', formData)
+    // TODO: call your POST raffle endpoint
+  }
+
+  const handleEditClick = (raffle) => {
+    setSelectedRaffle(raffle)
+    setEditModalOpen(true)
+  }
+  
+  const handleRaffleUpdate = (updatedRaffle) => {
+    // Call PUT / PATCH request
+    console.log('Update raffle:', updatedRaffle)
+    setEditModalOpen(false)
+  }
+
+  const handleDeleteClick = (raffle) => {
+    setRaffleToDelete(raffle)
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = () => {
+    // Call your delete mutation here
+    console.log(`Deleting raffle ID ${raffleToDelete.raffleId}`)
+    setDeleteDialogOpen(false)
+  }
+
+  const tabLabels = ['Open', 'Finished']
+  if (isAdmin) tabLabels.push('Drafts')
+
+  const filtered = {
+    Open: raffles.filter((r) => r.status === 'OPEN'),
+    Finished: raffles.filter((r) => r.status === 'CLOSED'),
+    Drafts: raffles.filter((r) => r.status === 'DRAFT')
+  }
 
   return (
     <Box sx={{ p: 4 }}>
@@ -28,105 +76,70 @@ const Raffles = () => {
         Our Raffles
       </Typography>
 
-      {/*if user is admin, add raffle button*/}
+      <Box
+        width={{ xs: 0.9, sm: 0.6 }}
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: 2,
+          mb: 3,
+          mx: 'auto'
+        }}
+      >
+        <Tabs value={tabIndex} onChange={handleChange}>
+          {tabLabels.map((label, i) => (
+            <Tab label={label} key={i} />
+          ))}
+        </Tabs>
+
+        {isAdmin && (
+          <Button
+            variant="contained"
+            onClick={(event) => {
+              event.stopPropagation()
+              setModalOpen(true)
+            }}
+            sx={{ fontWeight: 500, textTransform: 'none', color: 'white', whiteSpace: 'nowrap' }}
+          >
+            Add Raffle
+          </Button>
+        )}
+      </Box>
 
       <Grid container spacing={3}>
-        {raffles?.map((raffle) => (
-          <Grid item key={raffle.raffleId} xs={12} md={8} mx="auto">
-          <Card
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              borderRadius: 3,
-              boxShadow: 2,
-              overflow: 'hidden',
-              height: 360
-            }}
-          >
-            {/* Text Section (left) */}
-            <Box
-              sx={{
-                flex: 1,
-                p: 3,
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Box>
-                <Typography variant="h6" gutterBottom sx={{ fontWeight: 700 }}>
-                  {raffle.title}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {raffle.description}
-                </Typography>
-                
-              </Box>
-              <Box mt={2}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    flexDirection: { xs: 'column', sm: 'row' },
-                    gap: { xs: 1, sm: 2 },
-                    mt: 2
-                  }}
-                >
-                  <Typography
-                    variant="subtitle2"
-                    sx={{
-                      fontWeight: 600,
-                      textAlign: { xs: 'center', sm: 'left' }
-                    }}
-                  >
-                    🎟️ £{Number(raffle.ticketPrice).toFixed(2)} / ticket
-                  </Typography>
-
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      backgroundColor: raffle.hasEnded ? '#b00020' : '#46ab49',
-                      color: 'white',
-                      px: 1.2,
-                      py: 0.4,
-                      borderRadius: '12px',
-                      fontWeight: 600,
-                      fontSize: '0.75rem',
-                      textAlign: 'center'
-                    }}
-                  >
-                    {raffle.hasEnded
-                      ? 'Raffle Ended'
-                      : `Ends ${new Date(raffle.endsAt).toLocaleDateString('en-GB')}`}
-                  </Typography>
-                </Box>
-                <Button
-                  variant="contained"
-                  size="small"
-                  sx={{ mt: 1, backgroundColor: '#46ab49', fontWeight: 600 }}
-                >
-                  Enter Now
-                </Button>
-              </Box>
-            </Box>
+      {filtered[tabLabels[tabIndex]]?.map((raffle) => (
+        <Grid item xs={12} md={8} mx="auto" key={raffle.raffleId}>
+          <RaffleCard
+            raffle={raffle}
+            onEdit={handleEditClick}
+            onDelete={handleDeleteClick}
+          />
+        </Grid>
         
-            {/* Image Section (right) */}
-            <Box sx={{ width: '50%', height: '100%', ml: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-              <CardMedia
-                component="img"
-                image={raffle.imageUrl}
-                alt={raffle.title}
-                sx={{
-                  height: '100%',
-                  width: '100%',
-                  objectFit: 'contain',
-                }}
-              />
-            </Box>
-          </Card>
-        </Grid>        
-        ))}
+      ))}
       </Grid>
+
+      <CreateRaffleModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubmit={handleCreate}
+      />
+
+      <EditRaffleModal
+        open={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        onSubmit={handleRaffleUpdate}
+        raffle={selectedRaffle}
+      />
+
+      <DeleteRaffleDialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        onConfirm={confirmDelete}
+        raffleTitle={raffleToDelete?.title}
+      />
     </Box>
   )
 }

@@ -6,19 +6,16 @@ import { useNavigate } from 'react-router-dom'
 import HowItWorks from './components/howItWorks'
 import RaffleCarousel from './components/carousel/raffleCarousel'
 import { useAuth0 } from '@auth0/auth0-react'
+import WhyChooseUs from './components/whyChooseUs'
 
 const Homepage = () => {
   const navigate = useNavigate()
   const { user } = useAuth0()
 
-  const roles = user?.['https://luckvault.uk/user/roles'] || []
-
   const navigateLink = (link) => {
     navigate(link)
     window.scrollTo(0, 0)
   }
-
-  const isAdmin = roles.includes('admin')
 
   return (
       <Box width={1} sx={{ mx: 'auto'}} >
@@ -28,8 +25,9 @@ const Homepage = () => {
             We specialise in transforming and maintaining your outdoor space. Get in touch for a free quote.
           </Typography>
         </Box>*/}
-        <HowItWorks />
         <RaffleCarousel />
+        <HowItWorks />
+        <WhyChooseUs />
       </Box>
   )
 }

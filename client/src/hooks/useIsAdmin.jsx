@@ -4,7 +4,7 @@ const useIsAdmin = () => {
   const { user, isAuthenticated } = useAuth0()
 
   const roles = user?.['https://luckvault.uk/user/roles'] || []
-  const isAdmin = isAuthenticated && roles.includes('admin')
+  const isAdmin = isAuthenticated && roles.includes('Admin')
 
   return isAdmin
 }
