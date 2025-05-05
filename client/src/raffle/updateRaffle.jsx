@@ -10,6 +10,8 @@ import {
   Grid
 } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
+import { useUpdateRaffle } from '../connectors/raffles'
+import { useQueryClient } from 'react-query'
 
 // 👇 helper to cleanly format datetime-local input
 const formatDateForInput = (isoString) => {
@@ -19,7 +21,7 @@ const formatDateForInput = (isoString) => {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
 }
 
-const EditRaffleModal = ({ open, onClose, onSubmit, raffle }) => {
+const EditRaffleModal = ({ open, onClose, raffle }) => {
   const {
     register,
     handleSubmit,
@@ -27,8 +29,11 @@ const EditRaffleModal = ({ open, onClose, onSubmit, raffle }) => {
     formState: { errors },
     control
   } = useForm({
-    defaultValues:  raffle
+    defaultValues: raffle
   })
+
+  const queryClient = useQueryClient()
+  const { mutate: updateRaffle } = useUpdateRaffle()
 
   useEffect(() => {
     if (raffle) {
@@ -41,8 +46,21 @@ const EditRaffleModal = ({ open, onClose, onSubmit, raffle }) => {
   }, [raffle, reset])
 
   const onFormSubmit = (data) => {
-    onSubmit(data)
-    onClose()
+    updateRaffle({
+      raffleId: raffle.raffleId,
+      data: {
+        ...data,
+        ticketPrice: parseFloat(data.ticketPrice),
+        minTicketsPurchase: parseInt(data.minTicketsPurchase, 10),
+        maxTickets: parseInt(data.maxTickets, 10)
+      }
+    }, {
+      onSuccess: () => {
+        queryClient.invalidateQueries('raffles')
+        queryClient.invalidateQueries(['raffle', raffle.raffleId])
+        onClose()
+      }
+    })
   }
 
   return (
@@ -157,7 +175,7 @@ const EditRaffleModal = ({ open, onClose, onSubmit, raffle }) => {
           <Button onClick={onClose} color="secondary">
             Cancel
           </Button>
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" variant="outlined" color="primary">
             Update Raffle
           </Button>
         </DialogActions>

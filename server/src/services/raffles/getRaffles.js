@@ -10,7 +10,9 @@ const mapRaffle = raffle => ({
   maxTickets: raffle.max_tickets,
   endsAt: raffle.ends_at,
   status: raffle.status,
-  ticketsSold: parseInt(raffle.tickets_sold, 10) || 0
+  ticketsSold: parseInt(raffle.tickets_sold, 10) || 0,
+  winner_id: raffle.winner_id,
+  winner_nickname: raffle.winner_nickname
 })
 
 const getRafflesQuery = `

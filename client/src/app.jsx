@@ -17,7 +17,7 @@ const App = () => (
       <div className="body">
         <Routes />
       </div>
-      {/*<Footer />*/}
+      <Footer />
     </>
     </BrowserRouter>
   </QueryClientProvider>

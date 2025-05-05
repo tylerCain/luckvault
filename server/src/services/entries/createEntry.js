@@ -1,8 +1,8 @@
 import { pool } from '../../connectors/postgres.js'
 
 const insertUserQuery = `
-  INSERT INTO luckvault.users (auth0_id, email, mobile)
-  VALUES ($1, $2, $3)
+  INSERT INTO luckvault.users (auth0_id, email, mobile, nickname)
+  VALUES ($1, $2, $3, $4)
   ON CONFLICT (auth0_id) DO UPDATE 
     SET email = EXCLUDED.email,
         mobile = EXCLUDED.mobile
@@ -13,14 +13,14 @@ const insertEntryQuery = `
   VALUES ($1, $2)
 `
 
-const createEntries = async (auth0Id, email, mobile, raffleId, entryCount) => {
+const createEntries = async (auth0Id, email, mobile, nickname, raffleId, entryCount) => {
   const client = await pool.connect()
 
   try {
     await client.query('BEGIN')
 
     // Upsert user
-    await client.query(insertUserQuery, [auth0Id, email, mobile])
+    await client.query(insertUserQuery, [auth0Id, email, mobile, nickname])
 
     // Loop through entryCount and insert entries
     for (let i = 0; i < entryCount; i++) {

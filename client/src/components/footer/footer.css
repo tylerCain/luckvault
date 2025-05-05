@@ -1,5 +1,5 @@
 .footer-container {
-  background-color: white;
+  background-color: #46ab49;
   padding: 20px 0;
   display: flex;
   justify-content: center;
@@ -32,12 +32,12 @@
 }
 
 .footer-icon {
-  color: #46ab49;
+  color: white;
   margin-right: 5px;
 }
 
 .footer-text {
-  color: #46ab49;
+  color: white;
   margin: 5px 0;
 }
 

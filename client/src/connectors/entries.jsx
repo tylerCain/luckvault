@@ -20,6 +20,15 @@ const queryUserEntries = async ({ queryKey }) => {
   return res.json()
 }
 
+const queryAllUserEntries = async ({ queryKey }) => {
+  const [, userId] = queryKey
+
+  const res = await fetch(`/api/user/${userId}/entries`)
+
+  if (!res.ok) throw new Error('Failed to fetch user entries')
+  return res.json()
+}
+
 /** POST entries */
 const createEntry = async (body) => {
   const { raffleId } = body
@@ -36,5 +45,6 @@ const createEntry = async (body) => {
 
 export const useEntries = (raffleId, options = {}) => useQuery(['entries', raffleId, options], queryEntries, { enabled: !!raffleId })
 export const useUserEntries = (raffleId, userId) => useQuery(['userEntries', raffleId, userId], queryUserEntries, { enabled: !!raffleId && !!userId, select: (data) => data.entries?.[0] || null })
+export const useAllUserEntries = (userId) => useQuery(['allUserEntries', userId], queryAllUserEntries, { enabled: !!userId })
 
 export const useCreateEntry = (body) => useMutation(createEntry, body)

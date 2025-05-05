@@ -47,6 +47,7 @@ const EnterRaffleForm = ({ raffle, onSubmit }) => {
       auth0Id: user.sub,
       email: user.email,
       mobile: data.mobile,
+      nickname: user.nickname,
       raffleId: raffle.raffleId,
       entryCount: data.quantity
     })
@@ -120,7 +121,7 @@ const EnterRaffleForm = ({ raffle, onSubmit }) => {
 
       <Button
         type="submit"
-        variant="contained"
+        variant="outlined"
         color="primary"
         fullWidth
         size="large"

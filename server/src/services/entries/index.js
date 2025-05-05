@@ -1,4 +1,5 @@
 import createEntry from './createEntry.js'
+import getAllUserEntries from './getAllUserEntries.js'
 import getEntries from './getEntries.js'
 import getEntriesGroupedByUser from './getEntriesGrouped.js'
 import getEntriesByUser from './getEntriesByUser.js'
@@ -8,6 +9,7 @@ export default {
   getEntries,
   getEntriesGroupedByUser,
   getEntriesByUser,
+  getAllUserEntries,
 }
 
 export {
@@ -15,4 +17,5 @@ export {
   getEntries,
   getEntriesGroupedByUser,
   getEntriesByUser,
+  getAllUserEntries,
 }

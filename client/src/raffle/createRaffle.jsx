@@ -15,7 +15,7 @@ import { useQueryClient } from 'react-query'
 
 const statuses = ['DRAFT', 'OPEN', 'CLOSED']
 
-const CreateRaffleModal = ({ open, onClose, onSubmit }) => {
+const CreateRaffleModal = ({ open, onClose }) => {
   const queryClient = useQueryClient()
   const {
     register,
@@ -152,7 +152,7 @@ const CreateRaffleModal = ({ open, onClose, onSubmit }) => {
           <Button onClick={onClose} color="secondary">
             Cancel
           </Button>
-          <Button type="submit" variant="contained" color="primary">
+          <Button type="submit" variant="outlined" color="primary">
             Create Raffle
           </Button>
         </DialogActions>

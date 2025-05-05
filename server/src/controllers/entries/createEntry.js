@@ -1,8 +1,8 @@
 import { createEntry } from '../../services/entries/index.js'
 
 const controller = async (req) => {
-  const { auth0Id, email, mobile, raffleId, entryCount } = req.body
-  const entry = await createEntry(auth0Id, email, mobile, raffleId, entryCount)
+  const { auth0Id, email, mobile, nickname, raffleId, entryCount } = req.body
+  const entry = await createEntry(auth0Id, email, mobile, nickname, raffleId, entryCount)
   
   return {
     status: entry ? 201 : 500,

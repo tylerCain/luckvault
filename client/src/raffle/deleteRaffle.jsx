@@ -5,14 +5,33 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Button
+  Button,
+  Divider
 } from '@mui/material'
+import { useDeleteRaffle } from '../connectors/raffles'
+import { useQueryClient } from 'react-query'
 
-const DeleteRaffleDialog = ({ open, onClose, onConfirm, raffleTitle }) => {
+const DeleteRaffleDialog = ({ open, onClose, raffleId, raffleTitle }) => {
+  const queryClient = useQueryClient()
+  const deleteMutation = useDeleteRaffle()
+
+  const handleDelete = () => {
+    console.log(raffleId)
+    deleteMutation.mutate(raffleId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries('raffles')
+        onClose()
+      },
+      onError: (error) => {
+        console.error('Delete failed:', error)
+      }
+    })
+  }
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Delete Raffle?</DialogTitle>
-
+      <Divider />
       <DialogContent>
         <DialogContentText>
           Are you sure you want to permanently delete <strong>{raffleTitle}</strong>?<br /><br />
@@ -23,14 +42,15 @@ const DeleteRaffleDialog = ({ open, onClose, onConfirm, raffleTitle }) => {
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose} sx={{ textTransform: 'none' }}>
+        <Button variant="outlined" onClick={onClose} sx={{ textTransform: 'none' }}>
           Cancel
         </Button>
         <Button
-          onClick={onConfirm}
-          variant="contained"
+          onClick={handleDelete}
+          variant="outlined"
           color="error"
           sx={{ textTransform: 'none' }}
+          disabled={deleteMutation.isLoading}
         >
           Delete Raffle
         </Button>

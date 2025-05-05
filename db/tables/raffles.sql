@@ -9,5 +9,7 @@ CREATE TABLE IF NOT EXISTS luckvault.raffles (
   min_tickets_purchase INT,
   max_tickets INT NOT NULL,
   ends_at TIMESTAMP,
-  status luckvault.raffle_status DEFAULT 'DRAFT'
+  status luckvault.raffle_status DEFAULT 'DRAFT',
+  winner_id TEXT REFERENCES luckvault.users(auth0_id),
+  winner_nickname TEXT
 );

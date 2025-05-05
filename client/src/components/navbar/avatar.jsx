@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Avatar, Menu, MenuItem } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 const UserAvatar = () => {
+  const navigate = useNavigate()
   const { user, logout } = useAuth0()
   const [anchor, setAnchor] = useState(null)
 
@@ -30,7 +32,10 @@ const UserAvatar = () => {
         onClose={handleClose}
         disableScrollLock={true}
       >
-        <MenuItem onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })} sx={{ paddingX: 8 }}>
+        <MenuItem onClick={() => navigate('dashboard')} sx={{ paddingX: 4 }}>
+          Dashboard
+        </MenuItem>
+        <MenuItem onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })} sx={{ paddingX: 4 }}>
           Log Out
         </MenuItem>
       </Menu>

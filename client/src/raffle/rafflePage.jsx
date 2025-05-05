@@ -8,15 +8,21 @@ import RaffleProgressBar from './raffleProgressBar'
 import { useUserEntries } from '../connectors/entries'
 import { useAuth0 } from '@auth0/auth0-react'
 import RaffleEntrants from './raffleEntrants'
+import SuggestedRaffles from './suggestedRaffles'
+import WinnerDetails from './winnerDetails'
+import useIsAdmin from '../hooks/useIsAdmin'
 
 const RafflePage = () => {
   const { user } = useAuth0()
+  const isAdmin = useIsAdmin()
   const { raffleId } = useParams()
   const raffleResponse = useRaffle(raffleId)
   const entriesResponse = useUserEntries(raffleId, user?.sub)
   const navigate = useNavigate()
   const [showForm, setShowForm] = useState(false)
   const formRef = useRef(null)
+
+  console.log('user', user)
 
   useEffect(() => {
     if (showForm && formRef.current) {
@@ -43,8 +49,11 @@ const RafflePage = () => {
   }
 
   const raffle = raffleResponse.data.raffle
-  const hasEnded = new Date(raffle.endsAt) < new Date()
+  console.log(raffle)
+  const hasEnded = raffle.status === 'CLOSED'
   const userEntries = entriesResponse?.data
+
+  console.log('entries', entriesResponse)
 
   return (
     <>
@@ -62,6 +71,7 @@ const RafflePage = () => {
       >
         Back to Raffles
       </Button>
+
       <Box sx={{ px: { xs: 2, md: 6 }, pt: 4, pb: 8, maxWidth: '1100px', mx: 'auto' }}>
         <Grid container spacing={4} direction={{ xs: 'column', md: 'row' }}>
           {/* Left Side - Image with overlay */}
@@ -165,13 +175,19 @@ const RafflePage = () => {
 
             <Button
               fullWidth
-              variant="contained"
+              variant="outlined"
               sx={{ mt: 3, py: 1.2 }}
-              disabled={hasEnded}
+              disabled={hasEnded || !user}
               onClick={() => setShowForm((prev) => !prev)}
             >
               {hasEnded ? 'Raffle Ended' : 'Enter Raffle'}
             </Button>
+
+            {!user && !hasEnded && ( 
+              <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mt: 1 }}>
+                You must be signed in to enter the raffle.
+              </Typography>
+            )}
 
             <Box ref={formRef} mt={4}>
               <Collapse in={showForm} timeout="auto" unmountOnExit>
@@ -187,22 +203,65 @@ const RafflePage = () => {
             </Box>
 
             {/* Winner (shown if closed) add conditional to ffirst box to see entries etc*/}
-            {hasEnded && (
+            {hasEnded &&  (
               <>
-                <Box
-                  sx={{
-                    mt: 4,
-                    p: 2,
-                    borderRadius: 2,
-                    bgcolor: '#1c1c1e',
-                    color: 'white',
-                    textAlign: 'center'
-                  }}
-                >
-                  <Typography variant="subtitle1">
-                    You didn’t participate
-                  </Typography>
-                </Box>
+                {userEntries ? (
+                  <Box
+                    sx={{
+                      mt: 4,
+                      p: 2,
+                      borderRadius: 2,
+                      bgcolor: '#e6f4ea',
+                      color: '#015f44',
+                      textAlign: 'center'
+                    }}
+                  >
+                    {raffle.winnerId === user.sub ? (
+                      <>
+                        <Typography variant="subtitle1" fontWeight={600}>
+                          🎟️ You WON this raffle!
+                        </Typography>
+                        <Typography variant="subtitle1" fontWeight={600}>
+                          We will be in touch shortly for your prize.
+                        </Typography>
+                        <Typography variant="body2">
+                          {userEntries.tickets} ticket{userEntries.tickets > 1 ? 's' : ''} entered between{' '}
+                          {new Date(userEntries.first_entry).toLocaleString('en-GB')} and{' '}
+                          {new Date(userEntries.last_entry).toLocaleString('en-GB')}
+                        </Typography>
+                      </>
+                    ) : (
+                      <>
+                        <Typography variant="subtitle1" fontWeight={600}>
+                          🎟️ You entered this raffle!
+                        </Typography>
+                        <Typography variant="body2">
+                          {userEntries.tickets} ticket{userEntries.tickets > 1 ? 's' : ''} entered between{' '}
+                          {new Date(userEntries.first_entry).toLocaleString('en-GB')} and{' '}
+                          {new Date(userEntries.last_entry).toLocaleString('en-GB')}
+                        </Typography>
+                      </>
+                    )}
+                    
+                  </Box>
+                ) : (
+                  <>
+                    <Box
+                      sx={{
+                        mt: 4,
+                        p: 2,
+                        borderRadius: 2,
+                        bgcolor: '#1c1c1e',
+                        color: 'white',
+                        textAlign: 'center'
+                      }}
+                    >
+                      <Typography variant="subtitle1">
+                        You didn’t participate
+                      </Typography>
+                    </Box>
+                  </>
+                )}
                 <Box mt={4}>
                   <Divider sx={{ mb: 2 }} />
                   <Typography variant="h6" fontWeight={700}>
@@ -211,17 +270,25 @@ const RafflePage = () => {
                   <Box display="flex" alignItems="center" gap={2} mt={1}>
                     <Avatar />
                     <Box>
-                      <Typography fontWeight={600}>@Chris505</Typography>
-                      {/*<Typography variant="body2" color="text.secondary">
-                        Elite Member
-                      </Typography>*/}
+                      <Typography fontWeight={600}>@{raffle.winnerNickname}</Typography>
                     </Box>
                   </Box>
+                  {isAdmin && (
+                    <WinnerDetails raffleId={raffle.raffleId} />
+                  )}
                 </Box>
               </>
             )}
           </Grid>
-          <RaffleEntrants raffleId={raffleId} />
+          
+          <Box sx={{ width: '100%' }}>
+            <RaffleEntrants raffleId={raffleId} />
+          </Box>
+          
+          <Box sx={{ width: '100%' }}>
+            <SuggestedRaffles currentRaffleId={raffleId} limit={6} />
+          </Box>
+
         </Grid>
       </Box>
     </>

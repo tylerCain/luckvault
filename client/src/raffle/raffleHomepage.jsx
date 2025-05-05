@@ -13,6 +13,7 @@ import { useRaffles } from '../connectors/raffles'
 import CreateRaffleModal from './createRaffle'
 import EditRaffleModal from './updateRaffle'
 import DeleteRaffleDialog from './deleteRaffle'
+import DrawRaffleDialog from './drawRaffle'
 
 const Raffles = () => {
   const [tabIndex, setTabIndex] = useState(0)
@@ -21,6 +22,8 @@ const Raffles = () => {
   const [selectedRaffle, setSelectedRaffle] = useState(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [raffleToDelete, setRaffleToDelete] = useState(null)
+  const [drawDialogOpen, setDrawDialogOpen] = useState(null)
+  const [raffleToDraw, setRaffleToDraw] = useState(null)
   const isAdmin = useIsAdmin()
   const rafflesResponse = useRaffles()
 
@@ -34,20 +37,9 @@ const Raffles = () => {
     setTabIndex(newValue)
   }
 
-  const handleCreate = (formData) => {
-    console.log('Send to API:', formData)
-    // TODO: call your POST raffle endpoint
-  }
-
   const handleEditClick = (raffle) => {
     setSelectedRaffle(raffle)
     setEditModalOpen(true)
-  }
-  
-  const handleRaffleUpdate = (updatedRaffle) => {
-    // Call PUT / PATCH request
-    console.log('Update raffle:', updatedRaffle)
-    setEditModalOpen(false)
   }
 
   const handleDeleteClick = (raffle) => {
@@ -55,10 +47,9 @@ const Raffles = () => {
     setDeleteDialogOpen(true)
   }
 
-  const confirmDelete = () => {
-    // Call your delete mutation here
-    console.log(`Deleting raffle ID ${raffleToDelete.raffleId}`)
-    setDeleteDialogOpen(false)
+  const handleDrawClick = (raffle) => {
+    setRaffleToDraw(raffle)
+    setDrawDialogOpen(true)
   }
 
   const tabLabels = ['Open', 'Finished']
@@ -96,12 +87,12 @@ const Raffles = () => {
 
         {isAdmin && (
           <Button
-            variant="contained"
+            variant="outlined"
             onClick={(event) => {
               event.stopPropagation()
               setModalOpen(true)
             }}
-            sx={{ fontWeight: 500, textTransform: 'none', color: 'white', whiteSpace: 'nowrap' }}
+            sx={{ fontWeight: 500, textTransform: 'none', whiteSpace: 'nowrap' }}
           >
             Add Raffle
           </Button>
@@ -109,37 +100,42 @@ const Raffles = () => {
       </Box>
 
       <Grid container spacing={3}>
-      {filtered[tabLabels[tabIndex]]?.map((raffle) => (
-        <Grid item xs={12} md={8} mx="auto" key={raffle.raffleId}>
-          <RaffleCard
-            raffle={raffle}
-            onEdit={handleEditClick}
-            onDelete={handleDeleteClick}
-          />
-        </Grid>
-        
-      ))}
+        {filtered[tabLabels[tabIndex]]?.map((raffle) => (
+          <Grid item xs={12} md={8} mx="auto" key={raffle.raffleId}>
+            <RaffleCard
+              raffle={raffle}
+              onEdit={handleEditClick}
+              onDelete={handleDeleteClick}
+              onDraw={handleDrawClick}
+            />
+          </Grid>
+        ))}
       </Grid>
 
       <CreateRaffleModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        onSubmit={handleCreate}
       />
 
       <EditRaffleModal
         open={editModalOpen}
         onClose={() => setEditModalOpen(false)}
-        onSubmit={handleRaffleUpdate}
         raffle={selectedRaffle}
       />
 
       <DeleteRaffleDialog
         open={deleteDialogOpen}
         onClose={() => setDeleteDialogOpen(false)}
-        onConfirm={confirmDelete}
+        raffleId={raffleToDelete?.raffleId}
         raffleTitle={raffleToDelete?.title}
       />
+
+      <DrawRaffleDialog 
+        open={drawDialogOpen}
+        onClose={() => setDrawDialogOpen(false)}
+        raffle={raffleToDraw}
+      />
+
     </Box>
   )
 }

@@ -17,16 +17,18 @@ const RaffleEntrants = ({ raffleId }) => {
       sx={{
         mt: 2,
         display: 'flex',
-        flexDirection: 'column',
+        flexWrap: 'wrap',
         gap: 2,
-        px: { xs: 2, sm: 4 }, // horizontal padding only
+        px: { xs: 1, sm: 4 }, // horizontal padding only
         mx: { xs: 2, sm: 0 }
       }}
     >
-      <Typography variant="h6" fontWeight={700} gutterBottom>
-        Entrants
-      </Typography>
-
+      <Box sx={{ width: '100%' }}>
+        <Typography variant="h6" fontWeight={700} gutterBottom>
+          Entrants
+        </Typography>
+      </Box>
+  
       {entriesResponse.data.entries.map((entry) => (
         <Box
           key={entry.user_id}
@@ -35,12 +37,11 @@ const RaffleEntrants = ({ raffleId }) => {
             borderRadius: 2,
             p: 1,
             bgcolor: '#f8f8f8',
-            width: 'fit-content',
-            maxWidth: '100%',
-            minWidth: '200px',
+            width: 'auto',
+            flex: '0 0 auto'
           }}
         >
-          <Typography fontWeight={600}>{entry.email}</Typography>
+          <Typography variant="body2" fontWeight={600}>{entry.email}</Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             {entry.mobile || 'No mobile'} · {entry.tickets} ticket{entry.tickets > 1 ? 's' : ''}
           </Typography>
@@ -53,7 +54,7 @@ const RaffleEntrants = ({ raffleId }) => {
         </Box>
       ))}
     </Box>
-  )
+  )  
 }
 
 export default RaffleEntrants

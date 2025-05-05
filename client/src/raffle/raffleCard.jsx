@@ -7,43 +7,47 @@ import {
   Button,
   IconButton,
   Tooltip,
-  LinearProgress,
-  Chip
+  useMediaQuery,
+  useTheme
 } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import DoneIcon from '@mui/icons-material/WhereToVote'
 import useIsAdmin from '../hooks/useIsAdmin'
 import { useNavigate } from 'react-router-dom'
 import RaffleProgressBar from './raffleProgressBar'
 
-const RaffleCard = ({ raffle, onEdit, onDelete }) => {
+const RaffleCard = ({ raffle, onEdit, onDelete, onDraw, forceMobileView = false, hideAdmin = false }) => {
   const isAdmin = useIsAdmin()
   const navigate = useNavigate()
   const hasEnded = raffle.status === 'CLOSED'
+
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'))
+  const isMobileLayout = forceMobileView || isSmallScreen
 
   return (
     <Card
       sx={{
         display: 'flex',
-        flexDirection: { xs: 'column', sm: 'row' },
+        flexDirection: isMobileLayout ? 'column' : 'row',
         position: 'relative',
-        height: { xs: 360, sm: 300 },
+        height: isMobileLayout ? 240 : 300,
         overflow: 'hidden',
         borderRadius: 3,
         boxShadow: 2,
-        backgroundImage: {
-          xs: `linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.2)), url(${raffle.imageUrl})`,
-          sm: 'none'
-        },
+        backgroundImage: isMobileLayout
+          ? `linear-gradient(to top, rgba(0,0,0,0.85), rgba(0,0,0,0.2)), url(${raffle.imageUrl})`
+          : 'none',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        color: { xs: 'white', sm: 'inherit' }
+        color: isMobileLayout ? 'white' : 'inherit'
       }}
     >
       {/* Desktop Image Side */}
       <Box
         sx={{
-          display: { xs: 'none', sm: 'flex' },
+          display: isMobileLayout ? 'none' : 'flex',
           width: '50%',
           height: '100%',
           justifyContent: 'center',
@@ -70,7 +74,18 @@ const RaffleCard = ({ raffle, onEdit, onDelete }) => {
         }}
       >
         <Box>
-          <Typography variant="h6" sx={{ fontWeight: 700 }} noWrap>
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 700,
+              fontSize: {
+                xs: '0.75rem',
+                sm: forceMobileView ? '1rem' : '1.25rem'
+              },
+              overflowWrap: 'break-word', // ensures long words break nicely
+              whiteSpace: 'normal' // allows wrapping
+            }}
+          >
             {raffle.title}
           </Typography>
 
@@ -95,18 +110,25 @@ const RaffleCard = ({ raffle, onEdit, onDelete }) => {
             })}
           </Typography>
 
-          {isAdmin && (
+          {isAdmin && !hideAdmin && (
             <Box sx={{ display: 'flex', gap: 1, mt: 4 }}>
               <Tooltip title="Edit">
-                <IconButton onClick={() => onEdit(raffle)} sx={{ color: '#015f44', backgroundColor: { xs: 'white'} }}>
+                <IconButton onClick={() => onEdit(raffle)} sx={{ color: '#015f44', backgroundColor: isMobileLayout ? 'white' : 'transparent' }}>
                   <EditIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip title="Delete">
-                <IconButton onClick={() => onDelete(raffle)} sx={{ color: '#b00020', backgroundColor: { xs: 'white'} }}>
+                <IconButton onClick={() => onDelete(raffle)} sx={{ color: '#b00020', backgroundColor: isMobileLayout ? 'white' : 'transparent' }}>
                   <DeleteIcon />
                 </IconButton>
               </Tooltip>
+              {!hasEnded && (
+                <Tooltip title="Draw">
+                  <IconButton onClick={() => onDraw(raffle)} sx={{ color: '#015f44', backgroundColor: isMobileLayout ? 'white' : 'transparent' }}>
+                    <DoneIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
             </Box>
           )}
         </Box>
@@ -116,26 +138,38 @@ const RaffleCard = ({ raffle, onEdit, onDelete }) => {
             ticketsSold={raffle.ticketsSold ?? 12}
             maxTickets={raffle.maxTickets}
           />
-          
-          <Typography
-            variant="subtitle2"
-            sx={{ fontWeight: 600, mt: 2 }}
-          >
-            🎟️ £{Number(raffle.ticketPrice).toFixed(2)} / ticket
-          </Typography>
 
-          <Button
-            variant="contained"
-            size="small"
+          <Box
             sx={{
-              mt: 1.5,
-              fontWeight: 500,
-              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: { xs: 'row', sm: 'column' }, // Row on mobile, column on desktop
+              mt: 2,
             }}
-            onClick={() => navigate(`/raffles/${raffle.raffleId}`)}
           >
-            {hasEnded ? 'View Winner' : 'Enter Now'}
-          </Button>
+            <Typography
+              variant="subtitle2"
+              sx={{
+                fontWeight: 600,
+                mr: { xs: 2, sm: 0 }, // slight spacing on mobile
+              }}
+            >
+              🎟️ £{Number(raffle.ticketPrice).toFixed(2)} / ticket
+            </Typography>
+
+            <Button
+              variant="outlined"
+              size="small"
+              sx={{
+                fontWeight: 500,
+                mt: { xs: 0, sm: 1.5 }, // remove top margin on mobile to align height
+                ml: { xs: 'auto', sm: 0 }, // push to right on mobile
+              }}
+              onClick={() => navigate(`/raffles/${raffle.raffleId}`)}
+            >
+              {hasEnded ? 'View Winner' : 'Enter Now'}
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Card>

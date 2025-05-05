@@ -41,7 +41,17 @@ const theme = createTheme({
           fontWeight: 500
         },
         containedPrimary: {
-          color: '#ffffff' // ✅ white text for primary buttons
+          color: '#ffffff' // white text on contained buttons
+        },
+        outlinedPrimary: {
+          color: '#46ab49',
+          backgroundColor: '#ffffff',
+          border: '2px solid #46ab49',
+          '&:hover': {
+            backgroundColor: '#46ab49',
+            color: '#ffffff',
+            border: '2px solid #46ab49'
+          }
         }
       }
     }
