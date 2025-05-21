@@ -9,11 +9,11 @@ const insertUserQuery = `
 `
 
 const insertEntryQuery = `
-  INSERT INTO luckvault.entries (raffle_id, user_id)
-  VALUES ($1, $2)
+  INSERT INTO luckvault.entries (raffle_id, user_id, free)
+  VALUES ($1, $2, $3)
 `
 
-const createEntries = async (auth0Id, email, mobile, nickname, raffleId, entryCount) => {
+const createEntries = async (auth0Id, email, mobile, nickname, raffleId, entryCount, free) => {
   const client = await pool.connect()
 
   try {
@@ -24,7 +24,7 @@ const createEntries = async (auth0Id, email, mobile, nickname, raffleId, entryCo
 
     // Loop through entryCount and insert entries
     for (let i = 0; i < entryCount; i++) {
-      await client.query(insertEntryQuery, [raffleId, auth0Id])
+      await client.query(insertEntryQuery, [raffleId, auth0Id, free])
     }
 
     await client.query('COMMIT')

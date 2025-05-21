@@ -10,6 +10,7 @@ import {
   useMediaQuery,
   useTheme
 } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DoneIcon from '@mui/icons-material/WhereToVote'
@@ -17,7 +18,7 @@ import useIsAdmin from '../hooks/useIsAdmin'
 import { useNavigate } from 'react-router-dom'
 import RaffleProgressBar from './raffleProgressBar'
 
-const RaffleCard = ({ raffle, onEdit, onDelete, onDraw, forceMobileView = false, hideAdmin = false }) => {
+const RaffleCard = ({ raffle, onEdit, onDelete, onDraw, onFreeEntry, forceMobileView = false, hideAdmin = false }) => {
   const isAdmin = useIsAdmin()
   const navigate = useNavigate()
   const hasEnded = raffle.status === 'CLOSED'
@@ -123,11 +124,18 @@ const RaffleCard = ({ raffle, onEdit, onDelete, onDraw, forceMobileView = false,
                 </IconButton>
               </Tooltip>
               {!hasEnded && (
-                <Tooltip title="Draw">
-                  <IconButton onClick={() => onDraw(raffle)} sx={{ color: '#015f44', backgroundColor: isMobileLayout ? 'white' : 'transparent' }}>
-                    <DoneIcon />
+                <>
+                  <Tooltip title="Draw">
+                    <IconButton onClick={() => onDraw(raffle)} sx={{ color: '#015f44', backgroundColor: isMobileLayout ? 'white' : 'transparent' }}>
+                      <DoneIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Add Free Entry">
+                  <IconButton onClick={() => onFreeEntry(raffle)} sx={{ color: '#015f44', backgroundColor: isMobileLayout ? 'white' : 'transparent' }}>
+                    <AddIcon />
                   </IconButton>
                 </Tooltip>
+                </>
               )}
             </Box>
           )}

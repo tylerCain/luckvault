@@ -14,6 +14,7 @@ import CreateRaffleModal from './createRaffle'
 import EditRaffleModal from './updateRaffle'
 import DeleteRaffleDialog from './deleteRaffle'
 import DrawRaffleDialog from './drawRaffle'
+import FreeEntryModal from './freeEntryModal'
 
 const Raffles = () => {
   const [tabIndex, setTabIndex] = useState(0)
@@ -24,6 +25,8 @@ const Raffles = () => {
   const [raffleToDelete, setRaffleToDelete] = useState(null)
   const [drawDialogOpen, setDrawDialogOpen] = useState(null)
   const [raffleToDraw, setRaffleToDraw] = useState(null)
+  const [freeEntryOpen, setFreeEntryOpen] = useState(false)
+  const [raffleForFreeEntry, setRaffleForFreeEntry] = useState(null)
   const isAdmin = useIsAdmin()
   const rafflesResponse = useRaffles()
 
@@ -52,6 +55,11 @@ const Raffles = () => {
     setDrawDialogOpen(true)
   }
 
+  const handleFreeEntryClick = (raffle) => {
+    setRaffleForFreeEntry(raffle)
+    setFreeEntryOpen(true)
+  }
+
   const tabLabels = ['Open', 'Finished']
   if (isAdmin) tabLabels.push('Drafts')
 
@@ -71,9 +79,9 @@ const Raffles = () => {
         width={{ xs: 0.9, sm: 0.6 }}
         sx={{
           display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          flexDirection: { xs: 'column', sm: 'row' },
+          justifyContent: { xs: 'flex-start', sm: 'space-between' },
+          alignItems: { xs: 'flex-start', sm: 'center' },
           gap: 2,
           mb: 3,
           mx: 'auto'
@@ -92,7 +100,12 @@ const Raffles = () => {
               event.stopPropagation()
               setModalOpen(true)
             }}
-            sx={{ fontWeight: 500, textTransform: 'none', whiteSpace: 'nowrap' }}
+            sx={{
+              fontWeight: 500,
+              textTransform: 'none',
+              whiteSpace: 'nowrap',
+              alignSelf: { xs: 'flex-end', sm: 'center' }
+            }}
           >
             Add Raffle
           </Button>
@@ -107,6 +120,7 @@ const Raffles = () => {
               onEdit={handleEditClick}
               onDelete={handleDeleteClick}
               onDraw={handleDrawClick}
+              onFreeEntry={handleFreeEntryClick}
             />
           </Grid>
         ))}
@@ -134,6 +148,12 @@ const Raffles = () => {
         open={drawDialogOpen}
         onClose={() => setDrawDialogOpen(false)}
         raffle={raffleToDraw}
+      />
+
+      <FreeEntryModal
+        open={freeEntryOpen}
+        onClose={() => setFreeEntryOpen(false)}
+        raffleId={raffleForFreeEntry?.raffleId}
       />
 
     </Box>

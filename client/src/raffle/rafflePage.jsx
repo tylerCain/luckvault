@@ -11,6 +11,7 @@ import RaffleEntrants from './raffleEntrants'
 import SuggestedRaffles from './suggestedRaffles'
 import WinnerDetails from './winnerDetails'
 import useIsAdmin from '../hooks/useIsAdmin'
+import FreeEntryTooltip from './freeEntryTooltip'
 
 const RafflePage = () => {
   const { user } = useAuth0()
@@ -146,7 +147,7 @@ const RafflePage = () => {
                     }}
                   >
                     <Typography variant="subtitle1" fontWeight={600}>
-                      🎟️ You’ve entered this raffle!
+                      🎟️ You entered this raffle{userEntries.free ? (' for free!') : ('!')}
                     </Typography>
                     <Typography variant="body2">
                       {userEntries.tickets} ticket{userEntries.tickets > 1 ? 's' : ''} entered between{' '}
@@ -182,6 +183,8 @@ const RafflePage = () => {
             >
               {hasEnded ? 'Raffle Ended' : 'Enter Raffle'}
             </Button>
+
+            <FreeEntryTooltip />
 
             {!user && !hasEnded && ( 
               <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mt: 1 }}>
@@ -233,7 +236,7 @@ const RafflePage = () => {
                     ) : (
                       <>
                         <Typography variant="subtitle1" fontWeight={600}>
-                          🎟️ You entered this raffle!
+                          🎟️ You entered this raffle{userEntries.free ? (' for free!') : ('!')}
                         </Typography>
                         <Typography variant="body2">
                           {userEntries.tickets} ticket{userEntries.tickets > 1 ? 's' : ''} entered between{' '}

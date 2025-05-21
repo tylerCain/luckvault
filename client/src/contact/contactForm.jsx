@@ -36,11 +36,13 @@ const ContactForm = () => {
   }
 
   return (
-    <Box width={1} sx={{ backgroundColor: '#46ab49', pt: 5, pb: 2, display: 'flex', justifyContent: 'center' }}>
+    <Box width={0.9} sx={{ display: 'flex', justifyContent: 'center', mx: 'auto', my: 2 }}>
       <Box className="form-container">
-        <Typography align="center" variant="h3" sx={{ color: 'white', fontWeight: 700, mx: 'auto' }}>
-          Get in Touch
+        <Typography variant="h4" textAlign="center" sx={{ fontWeight: 'bold', color: '#015f44', mb: 2 }}>
+          Contact Us
         </Typography>
+        <Typography variant="h5" textAlign="center" sx={{mb: 3}}>Here you can get in touch with our team with any queries.</Typography>
+
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2} sx={{ my: 3 }}>
             <Grid item xs={12} md={4} container direction="column" spacing={2}>
@@ -52,16 +54,6 @@ const ContactForm = () => {
                   {...register("Name", { required: true })}
                   error={!!errors.Name}
                   helperText={errors.Name ? 'Name is required' : ''}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'white',
-                      },
-                    },
-                    '& label.Mui-focused': {
-                      color: 'white',
-                    },
-                  }}
                 />
               </Grid>
               <Grid item>
@@ -73,16 +65,6 @@ const ContactForm = () => {
                   {...register("Email", { required: true })}
                   error={!!errors.Email}
                   helperText={errors.Email ? 'Email is required' : ''}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'white',
-                      },
-                    },
-                    '& label.Mui-focused': {
-                      color: 'white',
-                    },
-                  }}
                 />
               </Grid>
               <Grid item>
@@ -92,16 +74,6 @@ const ContactForm = () => {
                   type="tel"
                   variant="outlined"
                   {...register("Phone")}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'white',
-                      },
-                    },
-                    '& label.Mui-focused': {
-                      color: 'white',
-                    },
-                  }}
                 />
               </Grid>
             </Grid>
@@ -115,26 +87,15 @@ const ContactForm = () => {
                 {...register("Message", { required: true })}
                 error={!!errors.Message}
                 helperText={errors.Message ? 'Message is required' : ''}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '&.Mui-focused fieldset': {
-                      borderColor: 'white',
-                    },
-                  },
-                  '& label.Mui-focused': {
-                    color: 'white',
-                  },
-                }}
               />
             </Grid>
           </Grid>
           <Grid item xs={12} sx={{ mt: 2, display: 'flex', justifyContent: { md: 'right', sm: 'center', xs: 'center' }}}>
             <Button
               type="submit"
-              variant="contained"
-              sx={{ backgroundColor: '#015f44', color: 'white', textTransform: 'none', mt: -2, height: '32px', '&:hover': {
-                backgroundColor: 'white', color: '#015f44'
-              }}}
+              variant="outlined"
+              size="large" 
+              sx={{ height: '32px' }}
             >
               Submit
             </Button>

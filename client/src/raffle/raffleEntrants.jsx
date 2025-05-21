@@ -15,7 +15,7 @@ const RaffleEntrants = ({ raffleId }) => {
   return (
     <Box
       sx={{
-        mt: 2,
+        mt: 0,
         display: 'flex',
         flexWrap: 'wrap',
         gap: 2,
@@ -43,7 +43,7 @@ const RaffleEntrants = ({ raffleId }) => {
         >
           <Typography variant="body2" fontWeight={600}>{entry.email}</Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {entry.mobile || 'No mobile'} · {entry.tickets} ticket{entry.tickets > 1 ? 's' : ''}
+            {entry.mobile || 'No mobile'} · {entry.tickets} ticket{entry.tickets > 1 ? 's' : ''} {entry.free && ' (F)'}
           </Typography>
           <Typography variant="caption" sx={{ color: 'text.disabled', display: 'block' }}>
             First entry: {new Date(entry.first_entry).toLocaleString('en-GB')}

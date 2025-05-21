@@ -32,10 +32,10 @@ const UserAvatar = () => {
         onClose={handleClose}
         disableScrollLock={true}
       >
-        <MenuItem onClick={() => navigate('dashboard')} sx={{ paddingX: 4 }}>
+        <MenuItem onClick={() => navigate('dashboard')} sx={{ paddingX: 2 }}>
           Dashboard
         </MenuItem>
-        <MenuItem onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })} sx={{ paddingX: 4 }}>
+        <MenuItem onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })} sx={{ paddingX: 2 }}>
           Log Out
         </MenuItem>
       </Menu>

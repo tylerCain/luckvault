@@ -31,7 +31,7 @@ const reasons = [
 ]
 
 const WhyChooseUs = () => (
-  <Box width={0.9} sx={{ px: 4, textAlign: 'center', bgcolor: 'white', color: '#015f44', mx: 'auto', borderRadius: '8px', pt: 4, pb: 6 }}>
+  <Box width={0.9} sx={{ px: 4, textAlign: 'center', bgcolor: 'white', color: '#015f44', mx: 'auto', borderRadius: '8px', pt: 4, pb: 2 }}>
     <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#015f44', mb: 3 }}>
       Why Choose Us?
     </Typography>

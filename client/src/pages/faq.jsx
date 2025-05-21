@@ -36,7 +36,7 @@ const FaqPage = () => {
   return (
     <Box sx={{ py: 8 }}>
       <Container maxWidth="md">
-        <Typography variant="h4" align="center" fontWeight={700} gutterBottom>
+        <Typography variant="h4" fontWeight={700} gutterBottom>
           Frequently Asked Questions
         </Typography>
 

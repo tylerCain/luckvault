@@ -22,6 +22,7 @@ routes.post('/raffle/:raffleId/entries', entries.post)
 
 routes.get('/users', users.get)
 routes.get('/user/:userId/entries', entries.getAllUserEntries)
+routes.post('/users', users.post)
 routes.get('/raffle/:raffleId/winner', users.getWinner)
 
 export default routes

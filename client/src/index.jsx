@@ -7,6 +7,7 @@ import HowItWorks from './components/howItWorks'
 import RaffleCarousel from './components/carousel/raffleCarousel'
 import { useAuth0 } from '@auth0/auth0-react'
 import WhyChooseUs from './components/whyChooseUs'
+import ContactForm from './contact/contactForm'
 
 const Homepage = () => {
   const navigate = useNavigate()
@@ -28,6 +29,7 @@ const Homepage = () => {
         <RaffleCarousel />
         <HowItWorks />
         <WhyChooseUs />
+        <ContactForm />
       </Box>
   )
 }

@@ -103,7 +103,7 @@ const Navbar = () => {
         disableScrollLock
         PaperProps={{
           sx: {
-            width: 250,
+            width: 120,
             height: 'auto',
             maxHeight: '90vh',
             mt: '64px',

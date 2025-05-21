@@ -1,14 +1,10 @@
 import React from 'react'
 import Slider from 'react-slick'
-import { Box, Typography, Button, Card, CardContent, CardMedia } from '@mui/material'
+import { Box, CircularProgress, Typography, Button, Card, CardContent, CardMedia } from '@mui/material'
 import { NextArrow, PrevArrow } from './carouselArrows'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import './carousel.css'  // Optional custom styling
-
-import bike from '../../bike.jpg'
-import holiday from '../../holiday.jpg'
-import ps5 from '../../ps5.jpg'
 import { useRaffles } from '../../connectors/raffles'
 import { useNavigate } from 'react-router-dom'
 
@@ -16,9 +12,21 @@ const RaffleCarousel = () => {
   const rafflesResponse = useRaffles()
   const navigate = useNavigate()
 
-  if (rafflesResponse.isLoading) return <Typography>Loading raffles...</Typography>
-  if (rafflesResponse.isError) return <Typography>Error loading raffles</Typography>
-  if (!rafflesResponse.isSuccess) return null
+if (rafflesResponse.isLoading) {
+  return (
+    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6 }}>
+      <CircularProgress />
+    </Box>
+  )
+}
+
+if (rafflesResponse.isError) {
+  // Optionally log the error somewhere
+  return null // Don't show error to users for now
+}
+
+if (!rafflesResponse.isSuccess) return null
+
 
   const raffles = rafflesResponse.data.raffles
 
@@ -47,7 +55,7 @@ const RaffleCarousel = () => {
             key={raffle.raffleId}
             sx={{
               position: 'relative',
-              height: 400,
+              height: { xs: 280, sm: 400 },
               backgroundImage: `url(${raffle.imageUrl})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',

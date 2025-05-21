@@ -96,7 +96,7 @@ const UserDashboard = () => {
                     }}
                   >
                     <Typography variant="subtitle1" fontWeight={600}>
-                      🎟️ You entered this raffle!
+                      🎟️ You entered this raffle{entry.free ? (' for free!') : ('!')}
                     </Typography>
                     <Typography variant="body2">
                       {entry.tickets} ticket{entry.tickets > 1 ? 's' : ''} entered between{' '}

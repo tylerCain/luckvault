@@ -5,13 +5,14 @@ const getEntriesGroupedQuery = `
     e.user_id,
     u.email,
     u.mobile,
+    e.free,
     COUNT(*) AS tickets,
     MIN(e.purchase_time) AS first_entry,
     MAX(e.purchase_time) AS last_entry
   FROM luckvault.entries e
   JOIN luckvault.users u ON u.auth0_id = e.user_id
   WHERE e.raffle_id = $1
-  GROUP BY e.user_id, u.email, u.mobile
+  GROUP BY e.user_id, u.email, u.mobile, e.free
   ORDER BY tickets DESC
 `
 
