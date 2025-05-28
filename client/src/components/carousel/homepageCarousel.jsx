@@ -29,72 +29,74 @@ const HomepageCarousel = ({ navigateLink }) => {
               height: { xs: '60vh', sm: '60vh', md: '60vh', lg: '60vh' },
             }}
           >
-            <Box
-              className="headerTypography"
-              width={{ xs: '80%', sm: '80%', md: '60%', lg: '60%' }}
+          <Box
+            className="headerTypography"
+            width={{ xs: '90%', sm: '80%', md: '60%' }}
+            sx={{
+              mt: 6,
+              mx: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+            }}
+          >
+            <Typography
+              variant="h4"
               sx={{
-                mt: 6,
-                mx: 'auto',  // Centers the box horizontally
-                display: 'flex', // Ensures the content inside the box is flexed
-                flexDirection: 'column', // Stacks the content vertically
-                alignItems: 'center', // Centers the content horizontally
-                justifyContent: 'center', // Centers the content vertically
-                textAlign: 'center', // Centers the text inside the Box
-                maxHeight: '100%'
+                color: 'white',
+                fontWeight: 700,
+                fontSize: { xs: '1.8rem', md: '2.125rem' } // Preserve h4 default on md+
               }}
             >
-              <Typography
-                variant="h4"
-                sx={{
-                  color: 'white',
-                  fontWeight: 700,
-                }}
-              >
-                One Vault, Endless Possibilities
-              </Typography>
-              <Typography
-                variant="h5"
-                sx={{
-                  color: 'white',
-                  fontWeight: 700,
-                  mt: 6,
-                }}
-              >
-                Your chance to win big, for low
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  color: 'white',
-                  mt: 6,
-                }}
-              >
-                Enter raffles for dream holidays, top tier tech, vehicles, cash and more!
-              </Typography>
-              <Button
-                align="center"
-                size="large"
-                sx={{
-                  backgroundColor: '#46ab49',
-                  color: 'white',
-                  py: 2,
-                  px: 4,
-                  textTransform: 'none',
-                  mx: 'auto',
-                  fontSize: '20px',
-                  borderRadius: '16px',
-                  mt: 6,
-                  '&:hover': {
-                    backgroundColor: '#015f44', // Light green color on hover
-                  },
-                }}
-                onClick={() => navigateLink('/raffles')}
-              >
-                ENTER NOW
-              </Button>
-            </Box>
+              One Vault, Endless Possibilities
+            </Typography>
+
+            <Typography
+              variant="h5"
+              sx={{
+                color: 'white',
+                fontWeight: 700,
+                mt: { xs: 3, md: 6 },
+                fontSize: { xs: '1.2rem', md: '1.5rem' }, // h5 default ~1.5rem
+              }}
+            >
+              Your chance to win big, for low
+            </Typography>
+
+            <Typography
+              variant="h6"
+              sx={{
+                color: 'white',
+                mt: { xs: 3, md: 6 },
+                fontSize: { xs: '1rem', md: '1.25rem' }, // h6 default ~1.25rem
+              }}
+            >
+              Enter raffles for dream holidays, top tier tech, vehicles, cash and more!
+            </Typography>
+
+            <Button
+              size="large"
+              sx={{
+                backgroundColor: '#46ab49',
+                color: 'white',
+                py: { xs: 1.25, md: 2 },
+                px: { xs: 2.5, md: 4 },
+                textTransform: 'none',
+                fontSize: { xs: '1rem', md: '1.25rem' },
+                borderRadius: '16px',
+                mt: { xs: 4, md: 6 },
+                '&:hover': {
+                  backgroundColor: '#015f44',
+                },
+              }}
+              onClick={() => navigateLink('/raffles')}
+            >
+              ENTER NOW
+            </Button>
           </Box>
         </Box>
+      </Box>
     </Box>
   )
 }
