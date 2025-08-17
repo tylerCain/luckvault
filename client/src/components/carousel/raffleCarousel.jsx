@@ -77,7 +77,7 @@ if (!rafflesResponse.isSuccess) return null
                 textAlign: 'center',
               }}
             >
-              <Typography variant="h4" sx={{ fontWeight: 700, mb: 2 }}>
+              <Typography variant="h4" sx={{ fontWeight: 700, mb: 2, fontSize: { xs: '1.5rem', sm: '2rem' } }}>
                 {raffle.title}
               </Typography>
               <Typography variant="body1" sx={{ maxWidth: 600, mb: 3 }}>

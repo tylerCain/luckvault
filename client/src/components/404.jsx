@@ -8,7 +8,7 @@ const NotFoundPage = () => {
   return (
     <Box
       sx={{
-        backgroundColor: '#46ab49',
+        backgroundColor: 'white',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -16,7 +16,7 @@ const NotFoundPage = () => {
         height: '70vh',
         textAlign: 'center',
         padding: 3,
-        color: 'white', // Grey color for text
+        color: '#46ab49',
       }}
     >
       <Typography variant="h1" sx={{ fontWeight: 700, mb: 2 }}>
@@ -28,13 +28,7 @@ const NotFoundPage = () => {
       <Typography variant="body1" sx={{ mb: 4 }}>
         Sorry, the page you are looking for does not exist.
       </Typography>
-      <Button
-        size="large"
-        sx={{ backgroundColor: '#015f44', color: 'white', '&:hover': {
-                  backgroundColor: '#46ab49'
-                }}}
-        onClick={() => navigate('/')}
-      >
+      <Button variant="outlined" size="large" onClick={() => navigate('/')}>
         Go to Homepage
       </Button>
     </Box>

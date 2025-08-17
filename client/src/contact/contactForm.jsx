@@ -17,7 +17,7 @@ const ContactForm = () => {
       'Kaizen ',
       process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
       {
-        to_name: 'Charlie', // Replace with your name or a placeholder
+        to_name: 'Albie - LuckVault', // Replace with your name or a placeholder
         from_name: data.Name,
         message: data.Message,
         email: data.Email,

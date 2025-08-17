@@ -19,6 +19,18 @@ NEW TODO:
 Payment
 Raffle enter success
 REsponsive
+Free entry DONE
+Deploy
+FAQ content
+TOS improve
+
+REsponsive:
+Avatar, Login centered
+Tabs / Button DONE
+Other raffles button and spacing DONE
+Remove unneeded components DONE?
+
+allow enter without login
 
 
 
@@ -26,3 +38,5 @@ Draw:
 Check if deadline, check if all tickets sold (done in frontend)
 Draw random winner using SQL, create endpoint etc.
 update raffle with userid/ nickname, set raffle to closed
+
+PABB14WS62KVCNPF5BMHAXY6

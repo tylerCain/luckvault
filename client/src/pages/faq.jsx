@@ -12,25 +12,46 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 const faqs = [
   {
     question: 'How do I enter a raffle?',
-    answer: 'Simply select a raffle, choose how many tickets you want to buy, and proceed with payment. Once completed, your entries will be automatically registered.'
+    answer:
+      'Browse our live raffles, select the prize you want, and choose how many tickets to purchase. Then complete the secure checkout process — your entries will be automatically logged and confirmed.'
   },
   {
-    question: 'Can I edit or cancel my entry?',
-    answer: 'Unfortunately, all entries are final and non-refundable. Please ensure you’ve selected the correct raffle and number of tickets before confirming.'
+    question: 'What happens after I enter?',
+    answer:
+      'Once you’ve purchased or submitted your entry, it will be added to our secure database. You can view your active entries in your account dashboard.'
   },
   {
     question: 'How is the winner selected?',
-    answer: 'Winners are drawn randomly either when the raffle deadline passes or all tickets are sold — whichever comes first. Every entry has a fair and equal chance.'
+    answer:
+      'When a raffle closes, our admin team initiates a secure, random draw from all valid entries using a database-level random selection. Each entry — paid or free — has an equal chance of winning.'
   },
   {
-    question: 'How will I know if I’ve won?',
-    answer: 'If you win, we’ll notify you by email and display your username on the raffle page. Make sure your email is accurate and checked regularly.'
+    question: 'How do I know if I’ve won?',
+    answer:
+      'Winners will be contacted directly by email/ mobile and also announced on the raffle page. Make sure your account details are correct and up to date.'
   },
   {
-    question: 'Why did the raffle close early?',
-    answer: 'If all available tickets are sold before the deadline, the raffle will close automatically and a winner will be drawn soon after.'
+    question: 'Can I cancel or refund my entry?',
+    answer:
+      'All raffle entries are final and non-refundable unless the raffle is cancelled by us, in which case refunds will be issued. Please double-check before confirming your purchase.'
+  },
+  {
+    question: 'Why did the raffle end early?',
+    answer:
+      'Some raffles may end before the deadline if all tickets are sold out. In that case, the winner will be drawn shortly after.'
+  },
+  {
+    question: 'Is my data secure?',
+    answer:
+      'Yes. We use Auth0 for authentication and store all data securely. Your personal details are only used to contact you if you win or for account verification.'
+  },
+  {
+    question: 'Can I enter for free?',
+    answer:
+      'Yes! UK residents can enter any raffle for free by post. You’ll need to include specific personal details and send it before the raffle closes. Full instructions are on the raffle page and in our Terms & Conditions.'
   }
 ]
+
 
 const FaqPage = () => {
   return (
